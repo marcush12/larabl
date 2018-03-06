@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
+use App\Http\Requests;
 use App\Blog;
+use App\Category;
 
 class BlogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin', ['only' => ['index', 'show']]);
+    }
+
     public function index()
     {
         //get the latest posts from the database
@@ -16,13 +24,17 @@ class BlogController extends Controller
 
     public function create()
     {
-        return view('blog.create');
+        $category = Category::pluck('name', 'id');
+        return view('blog.create', compact('category'));
     }
 
     public function store(Request $request)
     {
         $input = $request->all();
-        Blog::create($input);
+        $blog = Blog::create($input);
+        if($categoryIds = $request->category_id){
+            $blog->category()->sync($categoryIds);
+        }
         return back();
     }
 
@@ -34,8 +46,9 @@ class BlogController extends Controller
 
     public function edit($id)
     {
+        $category = Category::pluck('name', 'id');
         $blog = Blog::findOrFail($id);
-        return view('blog.edit', compact('blog'));
+        return view('blog.edit', compact('blog', 'category'));
     }
 
     public function update(Request $request, $id)
@@ -43,12 +56,17 @@ class BlogController extends Controller
         $input = $request->all();
         $blog = Blog::findOrFail($id);
         $blog->update($input);
+        if($categoryIds = $request->category_id){
+            $blog->category()->sync($categoryIds);
+        }
         return redirect('blog');
     }
 
     public function destroy(Request $request, $id)
     {
         $blog = Blog::findOrFail($id);
+        $categoryIds = $request->category_id;
+        $blog->category()->detach($categoryIds);
         $blog->delete($request->all());
         return redirect('/blog/bin');
     }

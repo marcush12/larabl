@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <main class="container">
+    <main class="container-fluid">
         <div class="container-fluid">
             <div class="jumbotron">
                 <h1>Latest blog posts</h1>
@@ -15,7 +15,7 @@
             </div>
         </div>
     </main>
-
+@endsection
     <hr>
 
-@endsection
+

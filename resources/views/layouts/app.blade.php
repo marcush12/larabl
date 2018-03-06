@@ -29,7 +29,7 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/blog') }}">
+                    <a class="navbar-brand" href="{{ url('/') }}">
                         Larablog
                         <!-- {{ config('app.name', 'Laravel') }} -->
                     </a>
