@@ -12,6 +12,12 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('admin', ['only' => ['create', 'edit', 'destroy', 'update', 'store']]);
+    }
+
     public function index()
     {
         $categories = Category::latest()->get();
@@ -25,7 +31,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('categories.create');
+        $categories = Category::latest()->get();
+        return view('categories.create', compact('categories'));
     }
 
     /**
@@ -36,6 +43,10 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'name'=>['required', 'unique:categories'],
+        ];
+        $this->validate($request, $rules);
         $category = new Category;
         $category->name = $request->name;
         $category->slug = str_slug($request->name);
@@ -91,6 +102,6 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
         $category->delete();
-        return redirect('categories');
+        return redirect('categories/create');
     }
 }

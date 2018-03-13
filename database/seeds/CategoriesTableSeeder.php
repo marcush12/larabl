@@ -14,13 +14,13 @@ class CategoriesTableSeeder extends Seeder
     public function run()
     {
         $cate_one = new Category();
-        $cate_one->slug = 'laravel';
-        $cate_one->name = 'Laravel';
+        $cate_one->slug = 'larablow';
+        $cate_one->name = 'Larablow';
         $cate_one->save();
 
         $cate_two = new Category();
-        $cate_two->slug = 'php';
-        $cate_two->name = 'PHP';
+        $cate_two->slug = 'phpmonster';
+        $cate_two->name = 'PHPmonster';
         $cate_two->save();
     }
 }
